@@ -25,9 +25,13 @@ public class GuideTouristiqueResource {
     @Path("/lieu/{lieu}")
     public Response obtenirInfos(@PathParam("lieu") String lieu) {
         try {
+            // 'infos' est maintenant une chaîne de caractères qui est déjà un JSON valide
             String infos = llmClient.obtenirInfosTouristiques(lieu, 5);
+
+            // On retourne la chaîne JSON directement, sans l'emballer dans un autre objet
             return Response.ok()
-                    .entity(new ReponseJson(infos))
+                    .entity(infos)
+                    .header("Access-Control-Allow-Origin", "*") // Bonus: Permet les tests depuis un fichier HTML
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,9 +57,13 @@ public class GuideTouristiqueResource {
                         .build();
             }
 
+            // 'infos' est maintenant une chaîne de caractères qui est déjà un JSON valide
             String infos = llmClient.obtenirInfosTouristiques(lieu, nombre);
+
+            // On retourne la chaîne JSON directement, sans l'emballer dans un autre objet
             return Response.ok()
-                    .entity(new ReponseJson(infos))
+                    .entity(infos)
+                    .header("Access-Control-Allow-Origin", "*") // Bonus: Permet les tests depuis un fichier HTML
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,24 +73,6 @@ public class GuideTouristiqueResource {
         }
     }
 
-    // Classes internes pour JSON
-    public static class ReponseJson {
-        public String infos;
-
-        public ReponseJson() {}
-
-        public ReponseJson(String infos) {
-            this.infos = infos;
-        }
-
-        public String getInfos() {
-            return infos;
-        }
-
-        public void setInfos(String infos) {
-            this.infos = infos;
-        }
-    }
 
     public static class ErrorJson {
         public String erreur;
